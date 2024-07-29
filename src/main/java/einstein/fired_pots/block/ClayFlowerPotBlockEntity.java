@@ -40,9 +40,9 @@ public class ClayFlowerPotBlockEntity extends BlockEntity {
         }
     }
 
-    public static boolean isNextToHeatedBlock(Level level, BlockPos pos) {
+    private static boolean isNextToHeatedBlock(Level level, BlockPos pos) {
         for (Direction direction : Direction.values()) {
-            if (level.getBlockState(pos.relative(direction)).is(ModInit.FIRES_CLAY_POT_TAG)) {
+            if (direction != Direction.UP && level.getBlockState(pos.relative(direction)).is(ModInit.FIRES_CLAY_POT_TAG)) {
                 return true;
             }
         }
