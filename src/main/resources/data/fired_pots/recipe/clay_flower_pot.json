@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "# #",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:clay_ball"
+    }
+  },
+  "result": {
+    "id": "fired_pots:clay_flower_pot"
+  }
+}

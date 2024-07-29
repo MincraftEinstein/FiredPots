@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "category": "misc",
+  "ingredient": {
+    "tag": "minecraft:decorated_pot_ingredients"
+  },
+  "result": {
+    "id": "fired_pots:crushed_pottery"
+  }
+}

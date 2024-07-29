@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "fired_pots",
+  "version": "${version}",
+  "name": "Fired Pots",
+  "description": "Decorated pots are now crafted by firing a clay pot, just like it was shown at Minecraft Live 2020",
+  "authors": [
+    "MincraftEinstein"
+  ],
+  "license": "All rights reserved",
+  "icon": "assets/fired_pots/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "einstein.fired_pots.client.FiredPotsClient"
+    ],
+    "main": [
+      "einstein.fired_pots.FiredPots"
+    ]
+  },
+  "mixins": [
+    "fired_pots.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/gSsaFAvrBM",
+        "modmenu.kofi": "https://ko-fi.com/mincrafteinstein"
+      }
+    }
+  }
+}
