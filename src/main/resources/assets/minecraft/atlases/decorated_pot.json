@@ -1,0 +1,9 @@
+{
+  "sources": [
+    {
+      "type": "directory",
+      "source": "entity/clay_pot",
+      "prefix": "entity/clay_pot/"
+    }
+  ]
+}

@@ -26,6 +26,6 @@ public class SherdTextureRegistryImpl implements SherdTextureRegistry {
             return;
         }
 
-        TEXTURES.put(potPatternKey, new Material(Sheets.DECORATED_POT_SHEET, texture.withPrefix("entity/decorated_pot/sherds/")));
+        TEXTURES.put(potPatternKey, new Material(Sheets.DECORATED_POT_SHEET, texture.withPrefix("entity/clay_pot/")));
     }
 }
