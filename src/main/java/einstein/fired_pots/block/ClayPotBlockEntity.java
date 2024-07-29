@@ -93,7 +93,10 @@ public class ClayPotBlockEntity extends ClayFlowerPotBlockEntity {
 
     public void setDecorations(PotDecorations decorations) {
         this.decorations = decorations;
-        setChanged();
-        level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
+
+        if (level != null) {
+            setChanged();
+            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
+        }
     }
 }
