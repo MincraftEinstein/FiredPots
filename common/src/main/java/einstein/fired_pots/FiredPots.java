@@ -21,6 +21,7 @@ public class FiredPots {
 
     public static void onDataReload(MinecraftServer server) {
         Util.removeRecipe(server.getRecipeManager(), mcLoc("decorated_pot_simple"), RecipeType.CRAFTING);
+        Util.removeRecipe(server.getRecipeManager(), mcLoc("decorated_pot"), RecipeType.CRAFTING);
         Util.removeRecipe(server.getRecipeManager(), mcLoc("flower_pot"), RecipeType.CRAFTING);
     }
 
