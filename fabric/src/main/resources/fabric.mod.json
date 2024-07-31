@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "fired_pots",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${description}",
+  "authors": [
+    "${mod_author}"
+  ],
+  "contact": {
+    "homepage": "https://curseforge.com/minecraft/mc-mods/fired-pots",
+    "sources": "https://github.com/MincraftEinstein/FiredPots",
+    "issues": "https://github.com/MincraftEinstein/FiredPots/issues"
+  },
+  "license": "All rights reserved",
+  "icon": "pack.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "einstein.fired_pots.FiredPotsFabric"
+    ],
+    "client": [
+      "einstein.fired_pots.FiredPotsFabric"
+    ]
+  },
+  "mixins": [
+    "fired_pots.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}",
+    "java": ">=${java_version}"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.modrinth": "https://modrinth.com/mod/fired-pots",
+        "modmenu.curseforge": "https://curseforge.com/minecraft/mc-mods/fired-pots",
+        "modmenu.discord": "https://discord.gg/gSsaFAvrBM",
+        "modmenu.kofi": "https://ko-fi.com/mincrafteinstein"
+      }
+    }
+  }
+}

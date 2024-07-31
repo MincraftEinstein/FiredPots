@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "refmap": "fired_pots.refmap.json",
+  "package": "einstein.fired_pots.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "LootPoolMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,34 @@
+modLoader = "javafml"
+loaderVersion = "${neoforge_loader_version_range}"
+license = "All rights reserved"
+issueTrackerURL = "https://github.com/MincraftEinstein/FiredPots/issues"
+
+[[mods]]
+    modId = "fired_pots"
+    version = "${version}"
+    displayName = "${mod_name}"
+    #updateJSONURL="https://change.me.example.invalid/updates.json"
+    displayURL="https://curseforge.com/minecraft/mc-mods/fired-pots"
+    logoFile = "pack.png"
+    authors = "${mod_author}"
+    description = "${description}"
+
+[[mixins]]
+    config = "fired_pots.mixins.json"
+
+[[mixins]]
+    config = "fired_pots.neoforge.mixins.json"
+
+[[dependencies.fired_pots]]
+    modId = "neoforge"
+    type = "required"
+    versionRange = "[${neoforge_version},)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.fired_pots]]
+    modId = "minecraft"
+    type = "required"
+    versionRange = "${minecraft_version_range}"
+    ordering = "NONE"
+    side = "BOTH"
