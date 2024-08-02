@@ -1,9 +1,10 @@
 package einstein.fired_pots;
 
-import einstein.fired_pots.api.SherdTextureRegistry;
+import einstein.fired_pots.api.ClayPotSherdTextureRegistry;
 import einstein.fired_pots.util.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.slf4j.Logger;
@@ -26,29 +27,33 @@ public class FiredPots {
     }
 
     public static void clientSetup() {
-        SherdTextureRegistry.INSTANCE.register(Items.ANGLER_POTTERY_SHERD, loc("angler_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.ARCHER_POTTERY_SHERD, loc("archer_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.ARMS_UP_POTTERY_SHERD, loc("arms_up_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.BLADE_POTTERY_SHERD, loc("blade_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.BREWER_POTTERY_SHERD, loc("brewer_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.BURN_POTTERY_SHERD, loc("burn_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.DANGER_POTTERY_SHERD, loc("danger_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.EXPLORER_POTTERY_SHERD, loc("explorer_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.FLOW_POTTERY_SHERD, loc("flow_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.FRIEND_POTTERY_SHERD, loc("friend_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.GUSTER_POTTERY_SHERD, loc("guster_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.HEART_POTTERY_SHERD, loc("heart_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.HEARTBREAK_POTTERY_SHERD, loc("heartbreak_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.HOWL_POTTERY_SHERD, loc("howl_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.MINER_POTTERY_SHERD, loc("miner_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.MOURNER_POTTERY_SHERD, loc("mourner_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.PLENTY_POTTERY_SHERD, loc("plenty_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.PRIZE_POTTERY_SHERD, loc("prize_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.SCRAPE_POTTERY_SHERD, loc("scrape_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.SHEAF_POTTERY_SHERD, loc("sheaf_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.SHELTER_POTTERY_SHERD, loc("shelter_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.SKULL_POTTERY_SHERD, loc("skull_pottery_sherd"));
-        SherdTextureRegistry.INSTANCE.register(Items.SNORT_POTTERY_SHERD, loc("snort_pottery_sherd"));
+        register(Items.ANGLER_POTTERY_SHERD, "angler_pottery_sherd");
+        register(Items.ARCHER_POTTERY_SHERD, "archer_pottery_sherd");
+        register(Items.ARMS_UP_POTTERY_SHERD, "arms_up_pottery_sherd");
+        register(Items.BLADE_POTTERY_SHERD, "blade_pottery_sherd");
+        register(Items.BREWER_POTTERY_SHERD, "brewer_pottery_sherd");
+        register(Items.BURN_POTTERY_SHERD, "burn_pottery_sherd");
+        register(Items.DANGER_POTTERY_SHERD, "danger_pottery_sherd");
+        register(Items.EXPLORER_POTTERY_SHERD, "explorer_pottery_sherd");
+        register(Items.FLOW_POTTERY_SHERD, "flow_pottery_sherd");
+        register(Items.FRIEND_POTTERY_SHERD, "friend_pottery_sherd");
+        register(Items.GUSTER_POTTERY_SHERD, "guster_pottery_sherd");
+        register(Items.HEART_POTTERY_SHERD, "heart_pottery_sherd");
+        register(Items.HEARTBREAK_POTTERY_SHERD, "heartbreak_pottery_sherd");
+        register(Items.HOWL_POTTERY_SHERD, "howl_pottery_sherd");
+        register(Items.MINER_POTTERY_SHERD, "miner_pottery_sherd");
+        register(Items.MOURNER_POTTERY_SHERD, "mourner_pottery_sherd");
+        register(Items.PLENTY_POTTERY_SHERD, "plenty_pottery_sherd");
+        register(Items.PRIZE_POTTERY_SHERD, "prize_pottery_sherd");
+        register(Items.SCRAPE_POTTERY_SHERD, "scrape_pottery_sherd");
+        register(Items.SHEAF_POTTERY_SHERD, "sheaf_pottery_sherd");
+        register(Items.SHELTER_POTTERY_SHERD, "shelter_pottery_sherd");
+        register(Items.SKULL_POTTERY_SHERD, "skull_pottery_sherd");
+        register(Items.SNORT_POTTERY_SHERD, "snort_pottery_sherd");
+    }
+
+    private static void register(Item item, String name) {
+        ClayPotSherdTextureRegistry.INSTANCE.register(item, loc(name));
     }
 
     public static ResourceLocation loc(String path) {

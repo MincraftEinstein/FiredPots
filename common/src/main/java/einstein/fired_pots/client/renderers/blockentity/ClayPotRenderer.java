@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import einstein.fired_pots.FiredPots;
 import einstein.fired_pots.block.entity.ClayPotBlockEntity;
-import einstein.fired_pots.impl.SherdTextureRegistryImpl;
+import einstein.fired_pots.impl.ClayPotSherdTextureRegistryImpl;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -83,8 +83,8 @@ public class ClayPotRenderer implements BlockEntityRenderer<ClayPotBlockEntity> 
 
     private static Optional<Material> getSideMaterial(Item item) {
         ResourceKey<DecoratedPotPattern> pattern = DecoratedPotPatterns.getPatternFromItem(item);
-        if (SherdTextureRegistryImpl.TEXTURES.containsKey(pattern)) {
-            return Optional.of(SherdTextureRegistryImpl.TEXTURES.get(pattern));
+        if (ClayPotSherdTextureRegistryImpl.TEXTURES.containsKey(pattern)) {
+            return Optional.of(ClayPotSherdTextureRegistryImpl.TEXTURES.get(pattern));
         }
         return Optional.ofNullable(Sheets.getDecoratedPotMaterial(pattern));
     }

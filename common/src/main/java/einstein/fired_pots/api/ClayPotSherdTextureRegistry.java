@@ -1,14 +1,14 @@
 package einstein.fired_pots.api;
 
-import einstein.fired_pots.impl.SherdTextureRegistryImpl;
+import einstein.fired_pots.impl.ClayPotSherdTextureRegistryImpl;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
 import java.util.function.Supplier;
 
-public interface SherdTextureRegistry {
+public interface ClayPotSherdTextureRegistry {
 
-    SherdTextureRegistry INSTANCE = new SherdTextureRegistryImpl();
+    ClayPotSherdTextureRegistry INSTANCE = new ClayPotSherdTextureRegistryImpl();
 
     default void register(Supplier<Item> item, ResourceLocation texture) {
         register(item.get(), texture);

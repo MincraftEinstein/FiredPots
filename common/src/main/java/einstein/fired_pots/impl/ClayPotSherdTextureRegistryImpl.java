@@ -1,7 +1,7 @@
 package einstein.fired_pots.impl;
 
 import einstein.fired_pots.FiredPots;
-import einstein.fired_pots.api.SherdTextureRegistry;
+import einstein.fired_pots.api.ClayPotSherdTextureRegistry;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SherdTextureRegistryImpl implements SherdTextureRegistry {
+public class ClayPotSherdTextureRegistryImpl implements ClayPotSherdTextureRegistry {
 
     public static final Map<ResourceKey<DecoratedPotPattern>, Material> TEXTURES = new HashMap<>();
 
