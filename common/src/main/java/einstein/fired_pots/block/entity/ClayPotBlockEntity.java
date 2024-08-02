@@ -1,4 +1,4 @@
-package einstein.fired_pots.block;
+package einstein.fired_pots.block.entity;
 
 import einstein.fired_pots.ModInit;
 import einstein.fired_pots.mixin.DecoratedPotBlockEntityAccessor;

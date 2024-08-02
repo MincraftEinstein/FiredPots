@@ -3,7 +3,7 @@ package einstein.fired_pots.client.renderers.blockentity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import einstein.fired_pots.FiredPots;
-import einstein.fired_pots.block.ClayPotBlockEntity;
+import einstein.fired_pots.block.entity.ClayPotBlockEntity;
 import einstein.fired_pots.impl.SherdTextureRegistryImpl;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

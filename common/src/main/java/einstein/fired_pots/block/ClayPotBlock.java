@@ -2,6 +2,7 @@ package einstein.fired_pots.block;
 
 import com.mojang.serialization.MapCodec;
 import einstein.fired_pots.ModInit;
+import einstein.fired_pots.block.entity.ClayPotBlockEntity;
 import einstein.fired_pots.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

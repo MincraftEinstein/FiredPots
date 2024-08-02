@@ -1,9 +1,9 @@
 package einstein.fired_pots;
 
 import einstein.fired_pots.block.ClayFlowerPotBlock;
-import einstein.fired_pots.block.ClayFlowerPotBlockEntity;
+import einstein.fired_pots.block.entity.ClayFlowerPotBlockEntity;
 import einstein.fired_pots.block.ClayPotBlock;
-import einstein.fired_pots.block.ClayPotBlockEntity;
+import einstein.fired_pots.block.entity.ClayPotBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
