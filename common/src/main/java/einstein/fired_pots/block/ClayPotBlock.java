@@ -10,6 +10,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -94,6 +95,7 @@ public class ClayPotBlock extends BaseEntityBlock implements SimpleWaterloggedBl
                 setDecorations(null, clayPotBlockEntity, hitDirection, decorations);
                 Util.playBlockSound(level, pos, soundType.getBreakSound(), soundType);
                 level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
+                stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
 
                 if (!player.isCreative()) {
                     popResourceFromFace(level, pos, hitDirection, new ItemStack(sideItem.get()));
