@@ -79,6 +79,7 @@ public class ClayPotBlock extends BaseEntityBlock implements SimpleWaterloggedBl
                         setDecorations(stack.getItem(), clayPotBlockEntity, hitDirection, decorations);
                         Util.playBlockSound(level, pos, soundType.getPlaceSound(), soundType);
                         level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
+                        stack.consume(1, player);
                         return ItemInteractionResult.SUCCESS;
                     }
                 }
