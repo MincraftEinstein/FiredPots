@@ -29,6 +29,6 @@ issueTrackerURL = "https://github.com/MincraftEinstein/FiredPots/issues"
 [[dependencies.fired_pots]]
     modId = "minecraft"
     type = "required"
-    versionRange = "${minecraft_version_range}"
+    versionRange = "[${minecraft_version}, ${max_minecraft_version})"
     ordering = "NONE"
     side = "BOTH"
