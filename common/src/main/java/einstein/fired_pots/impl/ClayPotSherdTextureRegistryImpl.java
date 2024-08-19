@@ -8,6 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 
@@ -19,8 +20,10 @@ public class ClayPotSherdTextureRegistryImpl implements ClayPotSherdTextureRegis
     public static final Map<ResourceKey<DecoratedPotPattern>, Material> TEXTURES = new HashMap<>();
 
     @Override
-    public void register(Item item, ResourceLocation texture) {
+    public void register(ItemLike itemLike, ResourceLocation texture) {
+        Item item = itemLike.asItem();
         ResourceKey<DecoratedPotPattern> potPatternKey = DecoratedPotPatterns.getPatternFromItem(item);
+
         if (potPatternKey == null) {
             FiredPots.LOGGER.warn("Failed to register sherd texture: No pattern found for item {}", BuiltInRegistries.ITEM.getKey(item));
             return;
