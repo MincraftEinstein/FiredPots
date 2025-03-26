@@ -3,10 +3,13 @@ package einstein.fired_pots.util;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import einstein.fired_pots.mixin.RecipeManagerAccessor;
+import einstein.fired_pots.mixin.RecipeMapAccessor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -27,12 +30,12 @@ public class Util {
     }
 
     public static void removeRecipe(RecipeManager recipeManager, ResourceLocation id, RecipeType<?> type) {
-        RecipeManagerAccessor manager = (RecipeManagerAccessor) recipeManager;
-        Map<ResourceLocation, RecipeHolder<?>> recipesByName = new HashMap<>(manager.getRecipesByName());
-        Multimap<RecipeType<?>, RecipeHolder<?>> recipesByType = HashMultimap.create(manager.getRecipesByType());
+        RecipeMapAccessor recipeMap = ((RecipeMapAccessor) ((RecipeManagerAccessor) recipeManager).getRecipeMap());
+        Map<ResourceKey<Recipe<?>>, RecipeHolder<?>> recipesByName = new HashMap<>(recipeMap.getRecipesByName());
+        Multimap<RecipeType<?>, RecipeHolder<?>> recipesByType = HashMultimap.create(recipeMap.getRecipesByType());
 
-        for (ResourceLocation recipeId : recipesByName.keySet()) {
-            if (recipeId.equals(id)) {
+        for (ResourceKey<Recipe<?>> recipeId : recipesByName.keySet()) {
+            if (recipeId.location().equals(id)) {
                 recipesByName.remove(recipeId);
                 break;
             }
@@ -42,7 +45,7 @@ public class Util {
         for (RecipeType<?> recipeType : recipesByType.keySet()) {
             if (recipeType.equals(type)) {
                 for (RecipeHolder<?> holder : recipesByType.get(recipeType)) {
-                    if (holder.id().equals(id)) {
+                    if (holder.id().location().equals(id)) {
                         recipesByType.remove(recipeType, holder);
                         success = true;
                         break;
@@ -55,7 +58,7 @@ public class Util {
             }
         }
 
-        manager.setRecipesByName(recipesByName);
-        manager.setRecipesByType(recipesByType);
+        recipeMap.setRecipesByName(recipesByName);
+        recipeMap.setRecipesByType(recipesByType);
     }
 }

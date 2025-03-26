@@ -10,11 +10,13 @@ dependencies {
         parchment("org.parchmentmc.data:parchment-${parchment_minecraft_version}:${parchment_version}@zip")
     }
 
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}+${minecraft_version}"
+    modImplementation "net.fabricmc:fabric-loader:${fabric_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
 }
 
 loom {
+    accessWidenerPath.set(project(":common").file("src/main/resources/${mod_id}.accesswidener"))
+
     mixin {
         defaultRefmapName.set("${mod_id}.refmap.json")
     }
@@ -33,4 +35,8 @@ loom {
             runDir('runs/server')
         }
     }
+}
+
+processResources {
+    exclude("META-INF/accesstransformer.cfg")
 }

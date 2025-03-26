@@ -25,6 +25,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import net.minecraft.world.level.block.entity.PotDecorations;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 import java.util.Optional;
@@ -58,7 +59,7 @@ public class ClayPotRenderer implements BlockEntityRenderer<ClayPotBlockEntity> 
     }
 
     @Override
-    public void render(ClayPotBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public void render(ClayPotBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay, Vec3 cameraPos) {
         PotDecorations decorations = blockEntity.getDecorations();
 
         poseStack.pushPose();

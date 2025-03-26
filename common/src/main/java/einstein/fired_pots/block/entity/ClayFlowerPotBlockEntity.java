@@ -63,7 +63,7 @@ public class ClayFlowerPotBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider);
-        cookTime = tag.getInt("CookTime");
+        cookTime = tag.getInt("CookTime").orElse(0);
     }
 
     @Override

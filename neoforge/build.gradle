@@ -27,10 +27,6 @@ neoForge {
             client()
         }
 
-        data {
-            data()
-        }
-
         server {
             server()
         }
@@ -44,3 +40,7 @@ neoForge {
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+processResources {
+    exclude("${mod_id}.accesswidener")
+}

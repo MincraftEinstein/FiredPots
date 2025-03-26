@@ -7,9 +7,9 @@ import einstein.fired_pots.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.Containers;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -18,7 +18,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -32,6 +33,8 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -62,12 +65,12 @@ public class ClayPotBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof ClayPotBlockEntity clayPotBlockEntity) {
             Direction hitDirection = hitResult.getDirection();
             if (hitDirection.getAxis() == Direction.Axis.Y) {
-                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                return InteractionResult.TRY_WITH_EMPTY_HAND;
             }
 
             PotDecorations decorations = clayPotBlockEntity.getDecorations();
@@ -81,15 +84,15 @@ public class ClayPotBlock extends BaseEntityBlock implements SimpleWaterloggedBl
                         Util.playBlockSound(level, pos, soundType.getPlaceSound(), soundType);
                         level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
                         stack.consume(1, player);
-                        return ItemInteractionResult.SUCCESS;
+                        return InteractionResult.SUCCESS_SERVER;
                     }
                 }
-                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                return InteractionResult.CONSUME;
             }
 
             if (stack.is(Items.BRUSH)) {
                 if (level.isClientSide) {
-                    return ItemInteractionResult.CONSUME;
+                    return InteractionResult.CONSUME;
                 }
 
                 setDecorations(null, clayPotBlockEntity, hitDirection, decorations);
@@ -100,11 +103,11 @@ public class ClayPotBlock extends BaseEntityBlock implements SimpleWaterloggedBl
                 if (!player.isCreative()) {
                     popResourceFromFace(level, pos, hitDirection, new ItemStack(sideItem.get()));
                 }
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS_SERVER;
             }
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
-        return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
+        return InteractionResult.PASS;
     }
 
     private static void setDecorations(@Nullable Item item, ClayPotBlockEntity clayPotBlockEntity, Direction direction, PotDecorations decorations) {
@@ -127,30 +130,29 @@ public class ClayPotBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor accessor, BlockPos pos, BlockPos neighborPos) {
+    protected BlockState updateShape(BlockState state, LevelReader reader, ScheduledTickAccess tickAccess, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
         if (state.getValue(WATERLOGGED)) {
-            accessor.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(accessor));
+            tickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(reader));
         }
-        return super.updateShape(state, direction, neighborState, accessor, pos, neighborPos);
+        return super.updateShape(state, reader, tickAccess, pos, direction, neighborPos, neighborState, random);
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock())) {
-            if (!newState.is(Blocks.DECORATED_POT)) {
-                BlockEntity blockEntity = level.getBlockEntity(pos);
-                if (blockEntity instanceof ClayPotBlockEntity clayPotBlockEntity) {
-                    clayPotBlockEntity.getDecorations().ordered().forEach(item -> {
-                        ItemStack stack = new ItemStack(item);
-                        if (stack.is(ItemTags.DECORATED_POT_SHERDS)) {
-                            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
-                        }
-                    });
-                    level.updateNeighbourForOutputSignal(pos, state.getBlock());
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+        BlockEntity blockentity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+        if (blockentity instanceof ClayPotBlockEntity clayPotBlockEntity) {
+            builder.withDynamicDrop(DecoratedPotBlock.SHERDS_DYNAMIC_DROP_ID, (consumer) -> {
+                for (Item item : clayPotBlockEntity.getDecorations().ordered()) {
+                    ItemStack stack = new ItemStack(item);
+
+                    if (stack.is(ItemTags.DECORATED_POT_SHERDS)) {
+                        consumer.accept(stack);
+                    }
                 }
-            }
-            super.onRemove(state, level, pos, newState, movedByPiston);
+            });
         }
+
+        return super.getDrops(state, builder);
     }
 
     @Override

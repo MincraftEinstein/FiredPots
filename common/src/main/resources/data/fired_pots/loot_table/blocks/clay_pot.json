@@ -46,6 +46,22 @@
         }
       ],
       "rolls": 1
+    },
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:dynamic",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "fired_pots:clay_pot"
+            }
+          ],
+          "name": "minecraft:sherds"
+        }
+      ],
+      "rolls": 1
     }
   ],
   "random_sequence": "fired_pots:blocks/clay_pot"

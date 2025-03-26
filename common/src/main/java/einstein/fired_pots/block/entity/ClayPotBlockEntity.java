@@ -4,6 +4,7 @@ import einstein.fired_pots.ModInit;
 import einstein.fired_pots.mixin.DecoratedPotBlockEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -59,13 +60,15 @@ public class ClayPotBlockEntity extends ClayFlowerPotBlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider);
-        decorations = PotDecorations.load(tag);
+        decorations = tag.read("sherds", PotDecorations.CODEC).orElse(PotDecorations.EMPTY);
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.saveAdditional(tag, provider);
-        decorations.save(tag);
+        if (!decorations.equals(PotDecorations.EMPTY)) {
+            tag.store("sherds", PotDecorations.CODEC, decorations);
+        }
     }
 
     @Override
@@ -75,9 +78,9 @@ public class ClayPotBlockEntity extends ClayFlowerPotBlockEntity {
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
-        super.applyImplicitComponents(input);
-        decorations = input.getOrDefault(DataComponents.POT_DECORATIONS, PotDecorations.EMPTY);
+    protected void applyImplicitComponents(DataComponentGetter getter) {
+        super.applyImplicitComponents(getter);
+        this.decorations = getter.getOrDefault(DataComponents.POT_DECORATIONS, PotDecorations.EMPTY);
     }
 
     @SuppressWarnings("deprecation")

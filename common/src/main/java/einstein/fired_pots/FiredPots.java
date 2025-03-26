@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,10 @@ public class FiredPots {
     }
 
     public static void onDataReload(MinecraftServer server) {
-        Util.removeRecipe(server.getRecipeManager(), mcLoc("decorated_pot_simple"), RecipeType.CRAFTING);
-        Util.removeRecipe(server.getRecipeManager(), mcLoc("decorated_pot"), RecipeType.CRAFTING);
-        Util.removeRecipe(server.getRecipeManager(), mcLoc("flower_pot"), RecipeType.CRAFTING);
+        RecipeManager manager = server.getRecipeManager();
+        Util.removeRecipe(manager, mcLoc("decorated_pot_simple"), RecipeType.CRAFTING);
+        Util.removeRecipe(manager, mcLoc("decorated_pot"), RecipeType.CRAFTING);
+        Util.removeRecipe(manager, mcLoc("flower_pot"), RecipeType.CRAFTING);
     }
 
     public static void clientSetup() {

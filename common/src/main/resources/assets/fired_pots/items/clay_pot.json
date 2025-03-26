@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "fired_pots:block/clay_pot"
+  }
+}
