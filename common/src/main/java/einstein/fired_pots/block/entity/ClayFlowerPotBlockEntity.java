@@ -29,7 +29,7 @@ public class ClayFlowerPotBlockEntity extends BlockEntity {
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, ClayFlowerPotBlockEntity blockEntity) {
-        if (isNextToHeatedBlock(level, pos) && !blockEntity.isWaterLogged()) {
+        if (isNextToHeatedBlock(level, pos) && !(state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(BlockStateProperties.WATERLOGGED))) {
             blockEntity.cookTime++;
 
             if (blockEntity.cookTime >= MAX_COOK_TIME) {
@@ -54,14 +54,9 @@ public class ClayFlowerPotBlockEntity extends BlockEntity {
         return false;
     }
 
-    protected boolean isWaterLogged() {
-        return false;
-    }
-
     protected void placeCookedBlock() {
         if (level != null) {
-            BlockPos pos = getBlockPos();
-            level.setBlockAndUpdate(pos, Blocks.FLOWER_POT.defaultBlockState());
+            level.setBlockAndUpdate(getBlockPos(), Blocks.FLOWER_POT.defaultBlockState());
         }
     }
 

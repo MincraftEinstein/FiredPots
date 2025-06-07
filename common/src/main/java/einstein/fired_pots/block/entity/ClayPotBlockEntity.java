@@ -41,11 +41,6 @@ public class ClayPotBlockEntity extends ClayFlowerPotBlockEntity {
         }
     }
 
-    @Override
-    protected boolean isWaterLogged() {
-        return getBlockState().getValue(BlockStateProperties.WATERLOGGED);
-    }
-
     @Nullable
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {
@@ -80,7 +75,7 @@ public class ClayPotBlockEntity extends ClayFlowerPotBlockEntity {
     @Override
     protected void applyImplicitComponents(DataComponentGetter getter) {
         super.applyImplicitComponents(getter);
-        this.decorations = getter.getOrDefault(DataComponents.POT_DECORATIONS, PotDecorations.EMPTY);
+        decorations = getter.getOrDefault(DataComponents.POT_DECORATIONS, PotDecorations.EMPTY);
     }
 
     @SuppressWarnings("deprecation")
