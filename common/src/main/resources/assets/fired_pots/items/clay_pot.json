@@ -1,6 +1,18 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "fired_pots:block/clay_pot"
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:special",
+        "base": "fired_pots:block/clay_pot",
+        "model": {
+          "type": "fired_pots:clay_pot"
+        }
+      },
+      {
+        "type": "minecraft:model",
+        "model": "fired_pots:block/clay_pot"
+      }
+    ]
   }
 }

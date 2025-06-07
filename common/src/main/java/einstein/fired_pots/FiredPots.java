@@ -16,6 +16,7 @@ public class FiredPots {
     public static final String MOD_ID = "fired_pots";
     public static final String MOD_NAME = "Fired Pots";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);
+    public static final ResourceLocation CLAY_POT_SPECIAL_RENDERER_ID = loc("clay_pot");
 
     public static void init() {
         ModInit.init();

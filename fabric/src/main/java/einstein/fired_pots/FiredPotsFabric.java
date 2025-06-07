@@ -1,13 +1,16 @@
 package einstein.fired_pots;
 
 import einstein.fired_pots.client.renderers.blockentity.ClayPotRenderer;
+import einstein.fired_pots.client.renderers.blockentity.ClayPotSpecialRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.SpecialBlockRendererRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.special.SpecialModelRenderers;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -56,5 +59,7 @@ public class FiredPotsFabric implements ModInitializer, ClientModInitializer {
         FiredPots.clientSetup();
         BlockEntityRenderers.register(ModInit.CLAY_POT_BLOCK_ENTITY.get(), ClayPotRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(ClayPotRenderer.MODEL_LAYER, ClayPotRenderer::createSidesLayer);
+        SpecialBlockRendererRegistry.register(ModInit.CLAY_POT.get(), new ClayPotSpecialRenderer.Unbaked());
+        SpecialModelRenderers.ID_MAPPER.put(FiredPots.CLAY_POT_SPECIAL_RENDERER_ID, ClayPotSpecialRenderer.Unbaked.CODEC);
     }
 }

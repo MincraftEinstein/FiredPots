@@ -5,6 +5,7 @@ import com.mojang.math.Axis;
 import einstein.fired_pots.FiredPots;
 import einstein.fired_pots.block.entity.ClayPotBlockEntity;
 import einstein.fired_pots.impl.ClayPotSherdTextureRegistryImpl;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -40,7 +41,11 @@ public class ClayPotRenderer implements BlockEntityRenderer<ClayPotBlockEntity> 
     private final ModelPart westSide;
 
     public ClayPotRenderer(BlockEntityRendererProvider.Context context) {
-        ModelPart modelPart = context.bakeLayer(MODEL_LAYER);
+        this(context.getModelSet());
+    }
+
+    public ClayPotRenderer(EntityModelSet modelSet) {
+        ModelPart modelPart = modelSet.bakeLayer(MODEL_LAYER);
         northSide = modelPart.getChild("north");
         southSide = modelPart.getChild("south");
         eastSide = modelPart.getChild("east");
@@ -60,16 +65,20 @@ public class ClayPotRenderer implements BlockEntityRenderer<ClayPotBlockEntity> 
 
     @Override
     public void render(ClayPotBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay, Vec3 cameraPos) {
-        PotDecorations decorations = blockEntity.getDecorations();
+        renderSides(poseStack, buffer, packedLight, packedOverlay, blockEntity.getDecorations());
+    }
 
+    public void renderSides(PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay, PotDecorations decorations) {
         poseStack.pushPose();
         poseStack.translate(0.5, 0, 0.5);
         poseStack.mulPose(Axis.YP.rotationDegrees(180));
         poseStack.translate(-0.5, 0, -0.5);
+
         renderSide(decorations.front(), northSide, poseStack, buffer, packedLight, packedOverlay);
         renderSide(decorations.back(), southSide, poseStack, buffer, packedLight, packedOverlay);
         renderSide(decorations.left(), westSide, poseStack, buffer, packedLight, packedOverlay);
         renderSide(decorations.right(), eastSide, poseStack, buffer, packedLight, packedOverlay);
+
         poseStack.popPose();
     }
 
