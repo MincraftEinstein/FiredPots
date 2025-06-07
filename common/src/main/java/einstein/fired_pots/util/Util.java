@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Util {
@@ -34,29 +35,15 @@ public class Util {
         Map<ResourceKey<Recipe<?>>, RecipeHolder<?>> recipesByName = new HashMap<>(recipeMap.getRecipesByName());
         Multimap<RecipeType<?>, RecipeHolder<?>> recipesByType = HashMultimap.create(recipeMap.getRecipesByType());
 
-        for (ResourceKey<Recipe<?>> recipeId : recipesByName.keySet()) {
-            if (recipeId.location().equals(id)) {
-                recipesByName.remove(recipeId);
-                break;
-            }
-        }
+        recipesByName.keySet().stream().filter(recipeId -> recipeId.location().equals(id))
+                .findFirst().ifPresent(recipesByName::remove);
 
-        boolean success = false;
-        for (RecipeType<?> recipeType : recipesByType.keySet()) {
-            if (recipeType.equals(type)) {
-                for (RecipeHolder<?> holder : recipesByType.get(recipeType)) {
-                    if (holder.id().location().equals(id)) {
-                        recipesByType.remove(recipeType, holder);
-                        success = true;
-                        break;
-                    }
-                }
-
-                if (success) {
-                    break;
-                }
-            }
-        }
+        recipesByType.keySet().stream().filter(recipeType -> recipeType.equals(type))
+                .findFirst().ifPresent(recipeType ->
+                        List.copyOf(recipesByType.get(type)).stream()
+                                .filter(holder -> holder.id().location().equals(id))
+                                .forEach(holder -> recipesByType.remove(recipeType, holder))
+                );
 
         recipeMap.setRecipesByName(recipesByName);
         recipeMap.setRecipesByType(recipesByType);
