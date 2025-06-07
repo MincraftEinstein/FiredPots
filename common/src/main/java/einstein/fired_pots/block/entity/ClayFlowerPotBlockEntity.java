@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 public class ClayFlowerPotBlockEntity extends BlockEntity {
@@ -42,7 +43,11 @@ public class ClayFlowerPotBlockEntity extends BlockEntity {
 
     private static boolean isNextToHeatedBlock(Level level, BlockPos pos) {
         for (Direction direction : Direction.values()) {
-            if (direction != Direction.UP && level.getBlockState(pos.relative(direction)).is(ModInit.FIRES_CLAY_POT_TAG)) {
+            BlockState state = level.getBlockState(pos.relative(direction));
+            if (direction != Direction.UP && state.is(ModInit.FIRES_CLAY_POT_TAG)) {
+                if (state.hasProperty(BlockStateProperties.LIT)) {
+                    return state.getValue(BlockStateProperties.LIT);
+                }
                 return true;
             }
         }
