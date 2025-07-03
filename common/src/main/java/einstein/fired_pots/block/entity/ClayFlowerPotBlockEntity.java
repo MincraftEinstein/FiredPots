@@ -14,6 +14,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class ClayFlowerPotBlockEntity extends BlockEntity {
 
@@ -61,14 +63,14 @@ public class ClayFlowerPotBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
-        cookTime = tag.getInt("CookTime").orElse(0);
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        cookTime = input.getIntOr("CookTime", 0);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
-        tag.putInt("CookTime", cookTime);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        output.putInt("CookTime", cookTime);
     }
 }

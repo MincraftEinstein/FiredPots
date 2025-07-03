@@ -18,6 +18,8 @@ import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 public class ClayPotBlockEntity extends ClayFlowerPotBlockEntity {
@@ -53,16 +55,16 @@ public class ClayPotBlockEntity extends ClayFlowerPotBlockEntity {
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
-        decorations = tag.read("sherds", PotDecorations.CODEC).orElse(PotDecorations.EMPTY);
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        decorations = input.read("sherds", PotDecorations.CODEC).orElse(PotDecorations.EMPTY);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
         if (!decorations.equals(PotDecorations.EMPTY)) {
-            tag.store("sherds", PotDecorations.CODEC, decorations);
+            output.store("sherds", PotDecorations.CODEC, decorations);
         }
     }
 
@@ -80,9 +82,9 @@ public class ClayPotBlockEntity extends ClayFlowerPotBlockEntity {
 
     @SuppressWarnings("deprecation")
     @Override
-    public void removeComponentsFromTag(CompoundTag tag) {
-        super.removeComponentsFromTag(tag);
-        tag.remove("sherds");
+    public void removeComponentsFromTag(ValueOutput output) {
+        super.removeComponentsFromTag(output);
+        output.discard("sherds");
     }
 
     public PotDecorations getDecorations() {

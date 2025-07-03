@@ -10,14 +10,20 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.PotDecorations;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.Objects;
+import java.util.Set;
 
 public record ClayPotSpecialRenderer(ClayPotRenderer renderer) implements SpecialModelRenderer<PotDecorations> {
 
     @Override
     public void render(@Nullable PotDecorations decorations, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay, boolean hasFoil) {
         renderer.renderSides(poseStack, bufferSource, packedLight, packedOverlay, Objects.requireNonNullElse(decorations, PotDecorations.EMPTY));
+    }
+
+    @Override
+    public void getExtents(Set<Vector3f> set) {
     }
 
     @Override
