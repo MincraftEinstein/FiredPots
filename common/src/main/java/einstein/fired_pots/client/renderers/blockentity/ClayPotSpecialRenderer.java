@@ -2,28 +2,27 @@ package einstein.fired_pots.client.renderers.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.PotDecorations;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import java.util.Objects;
-import java.util.Set;
+import java.util.function.Consumer;
 
 public record ClayPotSpecialRenderer(ClayPotRenderer renderer) implements SpecialModelRenderer<PotDecorations> {
 
     @Override
-    public void render(@Nullable PotDecorations decorations, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay, boolean hasFoil) {
-        renderer.renderSides(poseStack, bufferSource, packedLight, packedOverlay, Objects.requireNonNullElse(decorations, PotDecorations.EMPTY));
+    public void submit(@Nullable PotDecorations decorations, ItemDisplayContext displayContext, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean b, int outlineColor) {
+        renderer.submit(poseStack, nodeCollector, packedLight, packedOverlay, Objects.requireNonNullElse(decorations, PotDecorations.EMPTY), outlineColor);
     }
 
     @Override
-    public void getExtents(Set<Vector3f> set) {
+    public void getExtents(Consumer<Vector3fc> consumer) {
     }
 
     @Override
@@ -36,8 +35,8 @@ public record ClayPotSpecialRenderer(ClayPotRenderer renderer) implements Specia
         public static final MapCodec<Unbaked> CODEC = MapCodec.unit(Unbaked::new);
 
         @Override
-        public SpecialModelRenderer<?> bake(EntityModelSet modelSet) {
-            return new ClayPotSpecialRenderer(new ClayPotRenderer(modelSet));
+        public SpecialModelRenderer<?> bake(BakingContext bakingContext) {
+            return new ClayPotSpecialRenderer(new ClayPotRenderer(bakingContext.entityModelSet(), bakingContext.materials()));
         }
 
         @Override

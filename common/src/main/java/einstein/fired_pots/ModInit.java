@@ -7,7 +7,7 @@ import einstein.fired_pots.block.entity.ClayPotBlockEntity;
 import einstein.fired_pots.platform.Services;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -37,7 +37,7 @@ public class ModInit {
     }
 
     private static <T extends Block> Supplier<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> blockProperties) {
-        ResourceLocation id = loc(name);
+        Identifier id = loc(name);
         Supplier<T> instance = Services.REGISTRY.registerBlock(name, () -> block.apply(blockProperties.get()
                 .setId(ResourceKey.create(Registries.BLOCK, id))));
         registerItem(name, properties -> new BlockItem(instance.get(), properties), new Item.Properties().useBlockDescriptionPrefix());

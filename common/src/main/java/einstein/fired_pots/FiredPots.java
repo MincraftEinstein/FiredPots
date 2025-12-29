@@ -2,7 +2,7 @@ package einstein.fired_pots;
 
 import einstein.fired_pots.api.ClayPotSherdTextureRegistry;
 import einstein.fired_pots.util.Util;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -16,7 +16,7 @@ public class FiredPots {
     public static final String MOD_ID = "fired_pots";
     public static final String MOD_NAME = "Fired Pots";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);
-    public static final ResourceLocation CLAY_POT_SPECIAL_RENDERER_ID = loc("clay_pot");
+    public static final Identifier CLAY_POT_SPECIAL_RENDERER_ID = loc("clay_pot");
 
     public static void init() {
         ModInit.init();
@@ -59,11 +59,11 @@ public class FiredPots {
         ClayPotSherdTextureRegistry.INSTANCE.register(item, loc(name));
     }
 
-    public static ResourceLocation loc(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    public static Identifier loc(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 
-    public static ResourceLocation mcLoc(String path) {
-        return ResourceLocation.withDefaultNamespace(path);
+    public static Identifier mcLoc(String path) {
+        return Identifier.withDefaultNamespace(path);
     }
 }

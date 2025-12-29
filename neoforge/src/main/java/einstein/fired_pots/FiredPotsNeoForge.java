@@ -4,8 +4,8 @@ import einstein.fired_pots.client.renderers.blockentity.ClayPotRenderer;
 import einstein.fired_pots.client.renderers.blockentity.ClayPotSpecialRenderer;
 import einstein.fired_pots.platform.NeoForgeRegistryHelper;
 import einstein.fired_pots.util.ModifiableLootPool;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
@@ -64,17 +64,17 @@ public class FiredPotsNeoForge {
         // which is required for the game to pick only a single item from the table. This doesn't matter so much with
         // the Village Mason loot, but it does with the Trail Ruins loot (I think)
         NeoForge.EVENT_BUS.addListener((LootTableLoadEvent event) -> {
-            ResourceLocation id = event.getName();
+            Identifier id = event.getName();
             LootTable table = event.getTable();
             LootPool pool = table.getPool("main");
             ModifiableLootPool modifiablePool = (ModifiableLootPool) pool;
 
             if (pool != null) {
-                if (id.equals(BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_COMMON.location())) {
+                if (id.equals(BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_COMMON.identifier())) {
                     modifiablePool.firedPots$add(LootItem.lootTableItem(ModInit.CRUSHED_POTTERY.get()));
                     modifiablePool.firedPots$add(LootItem.lootTableItem(ModInit.CLAY_FLOWER_POT.get()));
                 }
-                else if (id.equals(BuiltInLootTables.VILLAGE_MASON.location())) {
+                else if (id.equals(BuiltInLootTables.VILLAGE_MASON.identifier())) {
                     modifiablePool.firedPots$add(LootItem.lootTableItem(ModInit.CLAY_POT.get()));
                     modifiablePool.firedPots$add(LootItem.lootTableItem(ModInit.CLAY_FLOWER_POT.get()));
                 }

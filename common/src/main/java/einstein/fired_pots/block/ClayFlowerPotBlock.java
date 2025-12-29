@@ -68,6 +68,6 @@ public class ClayFlowerPotBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null : createTickerHelper(type, ModInit.CLAY_FLOWER_POT_BLOCK_ENTITY.get(), ClayFlowerPotBlockEntity::serverTick);
+        return level.isClientSide() ? null : createTickerHelper(type, ModInit.CLAY_FLOWER_POT_BLOCK_ENTITY.get(), ClayFlowerPotBlockEntity::serverTick);
     }
 }

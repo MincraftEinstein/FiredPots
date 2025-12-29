@@ -13,12 +13,17 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.MaterialSet;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
@@ -27,29 +32,32 @@ import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Optional;
 
-public class ClayPotRenderer implements BlockEntityRenderer<ClayPotBlockEntity> {
+public class ClayPotRenderer implements BlockEntityRenderer<ClayPotBlockEntity, ClayPotRenderer.RenderState> {
 
     public static final ModelLayerLocation MODEL_LAYER = new ModelLayerLocation(FiredPots.loc("clay_pot_sides"), "main");
 
+    private final MaterialSet materials;
     private final ModelPart northSide;
     private final ModelPart southSide;
     private final ModelPart eastSide;
     private final ModelPart westSide;
 
     public ClayPotRenderer(BlockEntityRendererProvider.Context context) {
-        this(context.getModelSet());
+        this(context.entityModelSet(), context.materials());
     }
 
-    public ClayPotRenderer(EntityModelSet modelSet) {
+    public ClayPotRenderer(EntityModelSet modelSet, MaterialSet materials) {
         ModelPart modelPart = modelSet.bakeLayer(MODEL_LAYER);
         northSide = modelPart.getChild("north");
         southSide = modelPart.getChild("south");
         eastSide = modelPart.getChild("east");
         westSide = modelPart.getChild("west");
+        this.materials = materials;
     }
 
     public static LayerDefinition createSidesLayer() {
@@ -64,29 +72,40 @@ public class ClayPotRenderer implements BlockEntityRenderer<ClayPotBlockEntity> 
     }
 
     @Override
-    public void render(ClayPotBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay, Vec3 cameraPos) {
-        renderSides(poseStack, buffer, packedLight, packedOverlay, blockEntity.getDecorations());
+    public RenderState createRenderState() {
+        return new RenderState();
     }
 
-    public void renderSides(PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay, PotDecorations decorations) {
+    @Override
+    public void extractRenderState(ClayPotBlockEntity blockEntity, RenderState renderState, float partialTick, Vec3 cameraPosition, ModelFeatureRenderer.@Nullable CrumblingOverlay breakProgress) {
+        BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTick, cameraPosition, breakProgress);
+        renderState.decorations = blockEntity.getDecorations();
+    }
+
+    @Override
+    public void submit(RenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
         poseStack.pushPose();
         poseStack.translate(0.5, 0, 0.5);
         poseStack.mulPose(Axis.YP.rotationDegrees(180));
         poseStack.translate(-0.5, 0, -0.5);
 
-        renderSide(decorations.front(), northSide, poseStack, buffer, packedLight, packedOverlay);
-        renderSide(decorations.back(), southSide, poseStack, buffer, packedLight, packedOverlay);
-        renderSide(decorations.left(), westSide, poseStack, buffer, packedLight, packedOverlay);
-        renderSide(decorations.right(), eastSide, poseStack, buffer, packedLight, packedOverlay);
-
+        submit(poseStack, nodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, renderState.decorations, 0);
         poseStack.popPose();
     }
 
-    private static void renderSide(Optional<Item> sideItem, ModelPart part, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public void submit(PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, PotDecorations decorations, int outlineColor) {
+        submitSide(decorations.front(), northSide, poseStack, nodeCollector, packedLight, packedOverlay, outlineColor);
+        submitSide(decorations.back(), southSide, poseStack, nodeCollector, packedLight, packedOverlay, outlineColor);
+        submitSide(decorations.left(), westSide, poseStack, nodeCollector, packedLight, packedOverlay, outlineColor);
+        submitSide(decorations.right(), eastSide, poseStack, nodeCollector, packedLight, packedOverlay, outlineColor);
+    }
+
+    private void submitSide(Optional<Item> sideItem, ModelPart part, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, int outlineColor) {
         sideItem.ifPresent(item -> {
             if (!item.equals(Items.AIR) && !item.equals(Items.BRICK)) {
-                Optional<Material> material = getSideMaterial(item);
-                material.ifPresent(value -> part.render(poseStack, value.buffer(buffer, RenderType::entityCutout), packedLight, packedOverlay));
+                getSideMaterial(item).ifPresent(material ->
+                        nodeCollector.submitModelPart(part, poseStack, material.renderType(RenderTypes::entityCutout), packedLight, packedOverlay, materials.get(material), false, false, -1, null, outlineColor)
+                );
             }
         });
     }
@@ -97,5 +116,10 @@ public class ClayPotRenderer implements BlockEntityRenderer<ClayPotBlockEntity> 
             return Optional.of(ClayPotSherdTextureRegistryImpl.TEXTURES.get(pattern));
         }
         return Optional.ofNullable(Sheets.getDecoratedPotMaterial(pattern));
+    }
+
+    public static class RenderState extends BlockEntityRenderState {
+
+        private PotDecorations decorations = PotDecorations.EMPTY;
     }
 }

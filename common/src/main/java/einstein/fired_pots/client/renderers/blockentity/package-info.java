@@ -2,6 +2,6 @@
 @ParametersAreNonnullByDefault
 package einstein.fired_pots.client.renderers.blockentity;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -5,8 +5,8 @@ import com.google.common.collect.Multimap;
 import einstein.fired_pots.mixin.RecipeManagerAccessor;
 import einstein.fired_pots.mixin.RecipeMapAccessor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.crafting.Recipe;
@@ -30,18 +30,18 @@ public class Util {
         level.playSound(null, pos, sound, SoundSource.BLOCKS, volume, pitch);
     }
 
-    public static void removeRecipe(RecipeManager recipeManager, ResourceLocation id, RecipeType<?> type) {
+    public static void removeRecipe(RecipeManager recipeManager, Identifier id, RecipeType<?> type) {
         RecipeMapAccessor recipeMap = ((RecipeMapAccessor) ((RecipeManagerAccessor) recipeManager).getRecipeMap());
         Map<ResourceKey<Recipe<?>>, RecipeHolder<?>> recipesByName = new HashMap<>(recipeMap.getRecipesByName());
         Multimap<RecipeType<?>, RecipeHolder<?>> recipesByType = HashMultimap.create(recipeMap.getRecipesByType());
 
-        recipesByName.keySet().stream().filter(recipeId -> recipeId.location().equals(id))
+        recipesByName.keySet().stream().filter(recipeId -> recipeId.identifier().equals(id))
                 .findFirst().ifPresent(recipesByName::remove);
 
         recipesByType.keySet().stream().filter(recipeType -> recipeType.equals(type))
                 .findFirst().ifPresent(recipeType ->
                         List.copyOf(recipesByType.get(type)).stream()
-                                .filter(holder -> holder.id().location().equals(id))
+                                .filter(holder -> holder.id().identifier().equals(id))
                                 .forEach(holder -> recipesByType.remove(recipeType, holder))
                 );
 

@@ -78,7 +78,7 @@ public class ClayPotBlock extends BaseEntityBlock implements SimpleWaterloggedBl
                     .get(hitDirection.get3DDataValue() - 2);
 
             if (sideItem.isEmpty() || !(new ItemStack(sideItem.get())).is(ItemTags.DECORATED_POT_SHERDS)) {
-                if (!level.isClientSide) {
+                if (!level.isClientSide()) {
                     if (stack.is(ItemTags.DECORATED_POT_SHERDS)) {
                         setDecorations(stack.getItem(), clayPotBlockEntity, hitDirection, decorations);
                         Util.playBlockSound(level, pos, soundType.getPlaceSound(), soundType);
@@ -91,7 +91,7 @@ public class ClayPotBlock extends BaseEntityBlock implements SimpleWaterloggedBl
             }
 
             if (stack.is(Items.BRUSH)) {
-                if (level.isClientSide) {
+                if (level.isClientSide()) {
                     return InteractionResult.CONSUME;
                 }
 
@@ -184,6 +184,6 @@ public class ClayPotBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null : createTickerHelper(type, ModInit.CLAY_POT_BLOCK_ENTITY.get(), ClayPotBlockEntity::serverTick);
+        return level.isClientSide() ? null : createTickerHelper(type, ModInit.CLAY_POT_BLOCK_ENTITY.get(), ClayPotBlockEntity::serverTick);
     }
 }

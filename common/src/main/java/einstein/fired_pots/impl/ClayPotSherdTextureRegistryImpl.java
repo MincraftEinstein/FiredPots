@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.entity.DecoratedPotPattern;
@@ -20,7 +20,7 @@ public class ClayPotSherdTextureRegistryImpl implements ClayPotSherdTextureRegis
     public static final Map<ResourceKey<DecoratedPotPattern>, Material> TEXTURES = new HashMap<>();
 
     @Override
-    public void register(ItemLike itemLike, ResourceLocation texture) {
+    public void register(ItemLike itemLike, Identifier texture) {
         Item item = itemLike.asItem();
         ResourceKey<DecoratedPotPattern> potPatternKey = DecoratedPotPatterns.getPatternFromItem(item);
 
