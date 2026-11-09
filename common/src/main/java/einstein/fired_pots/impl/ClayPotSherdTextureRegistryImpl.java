@@ -3,7 +3,7 @@ package einstein.fired_pots.impl;
 import einstein.fired_pots.FiredPots;
 import einstein.fired_pots.api.ClayPotSherdTextureRegistry;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class ClayPotSherdTextureRegistryImpl implements ClayPotSherdTextureRegistry {
 
-    public static final Map<ResourceKey<DecoratedPotPattern>, Material> TEXTURES = new HashMap<>();
+    public static final Map<ResourceKey<DecoratedPotPattern>, SpriteId> TEXTURES = new HashMap<>();
 
     @Override
     public void register(ItemLike itemLike, Identifier texture) {
@@ -29,6 +29,6 @@ public class ClayPotSherdTextureRegistryImpl implements ClayPotSherdTextureRegis
             return;
         }
 
-        TEXTURES.put(potPatternKey, new Material(Sheets.DECORATED_POT_SHEET, texture.withPrefix("entity/clay_pot/")));
+        TEXTURES.put(potPatternKey, new SpriteId(Sheets.DECORATED_POT_SHEET, texture.withPrefix("entity/clay_pot/")));
     }
 }

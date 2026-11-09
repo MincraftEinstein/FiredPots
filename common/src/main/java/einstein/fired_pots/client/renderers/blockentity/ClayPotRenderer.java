@@ -20,10 +20,9 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.MaterialSet;
+import net.minecraft.client.resources.model.sprite.SpriteGetter;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
@@ -41,23 +40,23 @@ public class ClayPotRenderer implements BlockEntityRenderer<ClayPotBlockEntity, 
 
     public static final ModelLayerLocation MODEL_LAYER = new ModelLayerLocation(FiredPots.loc("clay_pot_sides"), "main");
 
-    private final MaterialSet materials;
+    private final SpriteGetter spriteGetter;
     private final ModelPart northSide;
     private final ModelPart southSide;
     private final ModelPart eastSide;
     private final ModelPart westSide;
 
     public ClayPotRenderer(BlockEntityRendererProvider.Context context) {
-        this(context.entityModelSet(), context.materials());
+        this(context.entityModelSet(), context.sprites());
     }
 
-    public ClayPotRenderer(EntityModelSet modelSet, MaterialSet materials) {
+    public ClayPotRenderer(EntityModelSet modelSet, SpriteGetter spriteGetter) {
         ModelPart modelPart = modelSet.bakeLayer(MODEL_LAYER);
         northSide = modelPart.getChild("north");
         southSide = modelPart.getChild("south");
         eastSide = modelPart.getChild("east");
         westSide = modelPart.getChild("west");
-        this.materials = materials;
+        this.spriteGetter = spriteGetter;
     }
 
     public static LayerDefinition createSidesLayer() {
@@ -83,7 +82,7 @@ public class ClayPotRenderer implements BlockEntityRenderer<ClayPotBlockEntity, 
     }
 
     @Override
-    public void submit(RenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
+        public void submit(RenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, net.minecraft.client.renderer.state.level.CameraRenderState cameraRenderState) {
         poseStack.pushPose();
         poseStack.translate(0.5, 0, 0.5);
         poseStack.mulPose(Axis.YP.rotationDegrees(180));
@@ -104,18 +103,18 @@ public class ClayPotRenderer implements BlockEntityRenderer<ClayPotBlockEntity, 
         sideItem.ifPresent(item -> {
             if (!item.equals(Items.AIR) && !item.equals(Items.BRICK)) {
                 getSideMaterial(item).ifPresent(material ->
-                        nodeCollector.submitModelPart(part, poseStack, material.renderType(RenderTypes::entityCutout), packedLight, packedOverlay, materials.get(material), false, false, -1, null, outlineColor)
+                        nodeCollector.submitModelPart(part, poseStack, material.renderType(RenderTypes::entityCutout), packedLight, packedOverlay, spriteGetter.get(material), false, false, -1, null, outlineColor)
                 );
             }
         });
     }
 
-    private static Optional<Material> getSideMaterial(Item item) {
+    private static Optional<SpriteId> getSideMaterial(Item item) {
         ResourceKey<DecoratedPotPattern> pattern = DecoratedPotPatterns.getPatternFromItem(item);
         if (ClayPotSherdTextureRegistryImpl.TEXTURES.containsKey(pattern)) {
             return Optional.of(ClayPotSherdTextureRegistryImpl.TEXTURES.get(pattern));
         }
-        return Optional.ofNullable(Sheets.getDecoratedPotMaterial(pattern));
+        return Optional.ofNullable(Sheets.getDecoratedPotSprite(pattern));
     }
 
     public static class RenderState extends BlockEntityRenderState {
