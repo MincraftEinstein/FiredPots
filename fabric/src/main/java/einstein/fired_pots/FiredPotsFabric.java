@@ -4,10 +4,9 @@ import einstein.fired_pots.client.renderers.blockentity.ClayPotRenderer;
 import einstein.fired_pots.client.renderers.blockentity.ClayPotSpecialRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.SpecialBlockRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.special.SpecialModelRenderers;
@@ -24,13 +23,13 @@ public class FiredPotsFabric implements ModInitializer, ClientModInitializer {
     public void onInitialize() {
         FiredPots.init();
 
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> {
-            entries.addBefore(Blocks.DECORATED_POT, new ItemStack(ModInit.CLAY_POT.get()));
-            entries.addBefore(Blocks.FLOWER_POT, new ItemStack(ModInit.CLAY_FLOWER_POT.get()));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> {
+            entries.insertBefore(Blocks.DECORATED_POT, new ItemStack(ModInit.CLAY_POT.get()));
+            entries.insertBefore(Blocks.FLOWER_POT, new ItemStack(ModInit.CLAY_FLOWER_POT.get()));
         });
 
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.INGREDIENTS).register(entries ->
-                entries.addBefore(Items.BRICK, new ItemStack(ModInit.CRUSHED_POTTERY.get()))
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(entries ->
+                entries.insertBefore(Items.BRICK, new ItemStack(ModInit.CRUSHED_POTTERY.get()))
         );
 
         LootTableEvents.MODIFY.register((key, builder, source, provider) -> {
@@ -58,8 +57,7 @@ public class FiredPotsFabric implements ModInitializer, ClientModInitializer {
     public void onInitializeClient() {
         FiredPots.clientSetup();
         BlockEntityRenderers.register(ModInit.CLAY_POT_BLOCK_ENTITY.get(), ClayPotRenderer::new);
-        EntityModelLayerRegistry.registerModelLayer(ClayPotRenderer.MODEL_LAYER, ClayPotRenderer::createSidesLayer);
-        SpecialBlockRendererRegistry.register(ModInit.CLAY_POT.get(), new ClayPotSpecialRenderer.Unbaked());
+        ModelLayerRegistry.registerModelLayer(ClayPotRenderer.MODEL_LAYER, ClayPotRenderer::createSidesLayer);
         SpecialModelRenderers.ID_MAPPER.put(FiredPots.CLAY_POT_SPECIAL_RENDERER_ID, ClayPotSpecialRenderer.Unbaked.CODEC);
     }
 }

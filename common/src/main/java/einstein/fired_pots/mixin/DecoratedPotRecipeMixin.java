@@ -1,6 +1,5 @@
 package einstein.fired_pots.mixin;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.DecoratedPotRecipe;
@@ -18,8 +17,8 @@ public class DecoratedPotRecipeMixin {
         cir.setReturnValue(false);
     }
 
-    @Inject(method = "assemble(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;", at = @At("HEAD"), cancellable = true)
-    private void assemble(CraftingInput craftingInput, HolderLookup.Provider provider, CallbackInfoReturnable<ItemStack> cir) {
+    @Inject(method = "assemble(Lnet/minecraft/world/item/crafting/CraftingInput;)Lnet/minecraft/world/item/ItemStack;", at = @At("HEAD"), cancellable = true)
+    private void assemble(CraftingInput input, CallbackInfoReturnable<ItemStack> cir) {
         cir.setReturnValue(ItemStack.EMPTY);
     }
 }

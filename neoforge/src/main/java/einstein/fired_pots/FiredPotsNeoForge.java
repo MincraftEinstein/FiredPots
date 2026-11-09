@@ -19,7 +19,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterSpecialBlockModelRendererEvent;
 import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -55,7 +54,6 @@ public class FiredPotsNeoForge {
         });
 
         eventBus.addListener((RegisterSpecialModelRendererEvent event) -> event.register(FiredPots.CLAY_POT_SPECIAL_RENDERER_ID, ClayPotSpecialRenderer.Unbaked.CODEC));
-        eventBus.addListener((RegisterSpecialBlockModelRendererEvent event) -> event.register(ModInit.CLAY_POT.get(), new ClayPotSpecialRenderer.Unbaked()));
 
         NeoForge.EVENT_BUS.addListener((ServerStartingEvent event) -> FiredPots.onDataReload(event.getServer()));
         NeoForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> FiredPots.onDataReload(event.getPlayerList().getServer()));
